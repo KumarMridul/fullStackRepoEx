@@ -13,8 +13,7 @@ function retrieveUserRepository(){
       for(var i=0;i<result.length;i++){
 		  var repoObj ={
 			  'name':result[i].name,
-			  'url' :result[i].html_url,
-			  'id': result[i].id
+			  'url' :result[i].html_url
 		  }
 			  
 		  var  repositoryItem = $('<div class="repo row"><div class="name col-sm-5">Repository Name:'+repoObj.name+'</div> <div class="url col-sm-5">URL:<a href='+repoObj.url+' target="_blank">Link to Repository</a></div><div class="link col-sm-2"><input type="button" value="Issue" class="issue-button"/></div></div>');
@@ -29,14 +28,14 @@ function retrieveUserRepository(){
 }
 function createIssue(repoObj){
 	$('.repository-name').html(repoObj.name);
-	$('.repository-name').attr('id',repoObj.id);
+	$('.repository-name').attr('id',repoObj.name);
 	$('.results').hide();
 	$('.issue-form').show();
 }
 
 function submitIssue() {
 	var username = document.querySelector('input[name="username"]').value;
-	var repoId = $('.repository-name').attr('id');
+	var repoName = $('.repository-name').attr('id');
 	var title = $('input[name="issue-title"]').val();
   
 	var body = $('input[name="description"]').val();
@@ -47,16 +46,19 @@ function submitIssue() {
 	};
 	var url = "https://api.github.com/repos/{:owner}/{:repo}/issues";
 
-	url= url.replace('{:owner}',username).replace('{:repo}',repoId);
+	url= url.replace('{:owner}',username).replace('{:repo}',repoName);
 	
 	$.ajax({
     url: url,
 	type: 'POST',
 	dataType: "json",
-	accepts: "application/json application/vnd.github+json",
-	contentType:"application/json",
+	headers: {          
+		Accept: "application/json application/vnd.github+json",         
+		"Content-Type": "application/json",
+		"Authorization": "auth token",
+		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
+	},
 	data:JSON.stringify(payload),
-	headers: {"Authorization": "auth token"},
     success: function(result){
 		console.log("result");
 	}
