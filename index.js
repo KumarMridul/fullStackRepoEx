@@ -55,8 +55,7 @@ function submitIssue() {
 	headers: {          
 		Accept: "application/json application/vnd.github+json",         
 		"Content-Type": "application/json",
-		"Authorization": "auth token",
-		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
+		"Authorization": "auth token"
 	},
 	data:JSON.stringify(payload),
     success: function(result){
