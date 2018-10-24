@@ -1,5 +1,8 @@
 const accessToken="c99a33cfb9263446ed0ce215d71dcc1368bd55a4";
 function retrieveUserRepository(){
+	$('.issue-form').hide();
+	$('.results').show();
+	$('.results').html('');
 	var username=document.querySelector('input[name="username"]').value,
 		url='https://api.github.com/users/{username}/repos';
 		
@@ -17,10 +20,10 @@ function retrieveUserRepository(){
 			  'url' :result[i].html_url
 		  }
 			  
-		  var  repositoryItem = $('<div class="repo row"><div class="name col-sm-5">Repository Name:'+repoObj.name+'</div> <div class="url col-sm-5">URL:<a href='+repoObj.url+' target="_blank">Link to Repository</a></div><div class="link col-sm-2"><input type="button" value="Issue" class="issue-button"/></div></div>');
+		  var  repositoryItem = $('<div class="repo row"><div class="name col-sm-5">Repository Name:<span class="repo-name">'+repoObj.name+'</span></div> <div class="url col-sm-5">URL:<a href='+repoObj.url+' target="_blank">Link to Repository</a></div><div class="link col-sm-2"><input type="button" value="Issue" id='+result[i].name+' class="issue-button"/></div></div>');
 		  $('.results').append(repositoryItem);
 
-		  $('.issue-button').click(function(){
+		  $('#'+result[i].name).click(function(event){
 			createIssue(repoObj);
 		  });
 	  }
@@ -28,8 +31,8 @@ function retrieveUserRepository(){
 });
 }
 function createIssue(repoObj){
-	$('.repository-name').html(repoObj.name);
-	$('.repository-name').attr('id',repoObj.name);
+	$('.repo-name').html(repoObj.name);
+	$('.repo-name').attr('id',repoObj.name);
 	$('.results').hide();
 	$('input[name="issue-title"]').val('');
 	$('input[name="description"]').val('');
@@ -38,16 +41,16 @@ function createIssue(repoObj){
 
 function submitIssue() {
 	var username = document.querySelector('input[name="username"]').value;
-	var repoName = $('.repository-name').attr('id');
+	var repoName = $('.repo-name').attr('id');
 	var title = $('input[name="issue-title"]').val();
   
-	var body = $('input[name="description"]').val();
+	var body = $('textarea[name="description"]').val();
 	
 	var payload = {
 	  "title": title,
 	  "body": body
 	};
-	var url = "https://api.github.com/repos/{:owner}/{:repo}/issues"+'?&access_token='+accessToken;
+	var url = "https://api.github.com/repos/{:owner}/{:repo}/issues"+'?access_token='+accessToken;
 
 	url= url.replace('{:owner}',username).replace('{:repo}',repoName);
 	
@@ -58,7 +61,7 @@ function submitIssue() {
 	mode: "cors",
 	cache: "no-cache",
 	headers: {
-	"Content-Type": "application/json; charset=utf-8",
+	"Content-Type": "application/json; charset=utf-8"
 	},
 	data:JSON.stringify(payload),
     success: function(result){

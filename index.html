@@ -11,7 +11,6 @@
   <style>
     .results {
       background-color: #decece;
-      padding: 30px 30px;
       margin: 60px 0; 
     }
     .issue-form {
@@ -19,6 +18,17 @@
       padding: 30px 30px;
       margin: 60px 0; 
       background-color: #decece;
+    }
+    .repo.row, .issue-container {
+      margin-bottom: 20px;
+      padding: 15px 10px;
+      font-size: 15px;
+      letter-spacing: 1px;
+      color: #333;
+      text-transform: capitalize;
+    }
+    span.repo-name {
+        color: green;
     }
   </style>
 </head>
@@ -45,11 +55,13 @@
   <div class="issue-form">
     <div class="row">
         <div class="col-sm-12">
-      <h3>Enter an Issue for Repository:<span class="repository-name"></span></h3>
+      <h3>Enter an Issue for Repository:<span class="repo-name"></span></h3>
     <form onsubmit="submitIssue(); return false">
+    <div class="issue-container">  
     <div class="title">Title: <input type="text" name="issue-title"></div><br><br>
     <div class="description">Description: <textarea rows="1" cols="50"  name="description"></textarea></div><br><br>
     <input type="submit" value="Submit Issue">
+  </div>
   </form>
   </div>
 </div>
