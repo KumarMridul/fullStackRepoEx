@@ -1,3 +1,4 @@
+const accessToken="c99a33cfb9263446ed0ce215d71dcc1368bd55a4";
 function retrieveUserRepository(){
 	var username=document.querySelector('input[name="username"]').value,
 		url='https://api.github.com/users/{username}/repos';
@@ -30,6 +31,8 @@ function createIssue(repoObj){
 	$('.repository-name').html(repoObj.name);
 	$('.repository-name').attr('id',repoObj.name);
 	$('.results').hide();
+	$('input[name="issue-title"]').val('');
+	$('input[name="description"]').val('');
 	$('.issue-form').show();
 }
 
@@ -44,7 +47,7 @@ function submitIssue() {
 	  "title": title,
 	  "body": body
 	};
-	var url = "https://api.github.com/repos/{:owner}/{:repo}/issues";
+	var url = "https://api.github.com/repos/{:owner}/{:repo}/issues"+'?&access_token='+accessToken;
 
 	url= url.replace('{:owner}',username).replace('{:repo}',repoName);
 	
@@ -52,14 +55,16 @@ function submitIssue() {
     url: url,
 	type: 'POST',
 	dataType: "json",
-	headers: {          
-		Accept: "application/json application/vnd.github+json",         
-		"Content-Type": "application/json",
-		"Authorization": "auth token"
+	mode: "cors",
+	cache: "no-cache",
+	headers: {
+	"Content-Type": "application/json; charset=utf-8",
 	},
 	data:JSON.stringify(payload),
     success: function(result){
-		console.log("result");
+		alert('Issue submitted for repository: '+repoName);
+		$('.issue-form').hide();
+		$('.results').show();
 	}
 	});
 }
